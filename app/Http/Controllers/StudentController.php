@@ -15,7 +15,9 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $students = Student::paginate();
+        $students = Student::with(['study_program' => function ($query) {
+            $query->orderBy('code', 'ASC');
+        }])->orderBy('npm', 'ASC')->paginate();
 
         return view('students.index', compact('students'));
     }
