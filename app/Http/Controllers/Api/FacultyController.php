@@ -43,7 +43,7 @@ class FacultyController extends Controller
                 ->json([
                     'success' => false,
                     'message' => $validator->errors()
-                ], 400);
+                ], 422);
         }
 
         $faculty = Faculty::create($request->all());
@@ -89,7 +89,7 @@ class FacultyController extends Controller
                 ->json([
                     'success' => false,
                     'message' => $validator->errors()
-                ]);
+                ], 422);
         }
 
         $faculty->update($request->all());
