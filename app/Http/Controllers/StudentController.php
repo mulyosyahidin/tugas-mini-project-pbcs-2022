@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Student;
+use App\Models\Study_program;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
@@ -14,7 +15,9 @@ class StudentController extends Controller
      */
     public function index()
     {
-        //
+        $students = Student::paginate();
+
+        return view('students.index', compact('students'));
     }
 
     /**
@@ -24,7 +27,9 @@ class StudentController extends Controller
      */
     public function create()
     {
-        //
+        $study_programs = Study_program::all();
+
+        return view('students.create', compact('study_programs'));
     }
 
     /**
@@ -35,18 +40,16 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'study_program_id' => 'required|numeric|exists:study_programs,id',
+            'name' => 'required|min:4|max:255',
+            'npm' => 'required|min:9|max:9',
+        ]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Student  $student
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Student $student)
-    {
-        //
+        Student::create($request->all());
+
+        return redirect()->route('students.index')
+            ->withSuccess('Berhasil menambahkan mahasiswa');
     }
 
     /**
@@ -57,7 +60,9 @@ class StudentController extends Controller
      */
     public function edit(Student $student)
     {
-        //
+        $study_programs = Study_program::all();
+
+        return view('students.edit', compact('student', 'study_programs'));
     }
 
     /**
@@ -69,7 +74,16 @@ class StudentController extends Controller
      */
     public function update(Request $request, Student $student)
     {
-        //
+        $request->validate([
+            'study_program_id' => 'required|numeric|exists:study_programs,id',
+            'name' => 'required|min:4|max:255',
+            'npm' => 'required|min:9|max:9',
+        ]);
+
+        $student->update($request->all());
+
+        return redirect()->route('students.index')
+            ->withSuccess('Berhasil mengubah mahasiswa');
     }
 
     /**
@@ -80,6 +94,9 @@ class StudentController extends Controller
      */
     public function destroy(Student $student)
     {
-        //
+        $student->delete();
+
+        return redirect()->route('students.index')
+            ->withSuccess('Berhasil menghapus mahasiswa');
     }
 }

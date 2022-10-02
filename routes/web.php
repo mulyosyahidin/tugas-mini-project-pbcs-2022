@@ -25,8 +25,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('faculties', FacultyController::class)->except('show');
-    Route::resource('study-programs', StudyProgramController::class);
-    Route::resource('students', StudentController::class);
+    Route::resource('study-programs', StudyProgramController::class)->except('show');
+    Route::resource('students', StudentController::class)->except('show');
 });
 
 require __DIR__.'/auth.php';
